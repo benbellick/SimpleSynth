@@ -10,7 +10,6 @@ class Osc : public StreamInterface<double> {
         void reset() override;
     private:
         void boundCurPhase();
-        double m_sampleRate;
         double m_curFreq;
         double m_curPhase;
         double m_incr;
