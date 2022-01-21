@@ -12,7 +12,7 @@ void Osc::updateFreq(double freq) {
     m_incr = freq * 2 * M_PI / m_sampleRate;
 }
 
-double Osc::tick(){
+double Osc::next(){
     double tickVal = sin(m_curPhase);
     m_curPhase += m_incr;
     return tickVal;

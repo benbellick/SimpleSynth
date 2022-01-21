@@ -1,11 +1,13 @@
 #pragma once
+#include "stream_interface.hpp"
 
 //For now, we assume sin, we will alter later
-class Osc {
+class Osc : public StreamInterface<double> {
     public:
         Osc(unsigned long srate);
         void updateFreq(double freq);
-        double tick();
+        double next() override;
+        void reset() override;
     private:
         void boundCurPhase();
         double m_sampleRate;

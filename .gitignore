@@ -1,3 +1,6 @@
 #Ignore build files
 bin
 obj
+
+#Ignore tags file used for proper vim navigation
+tags
