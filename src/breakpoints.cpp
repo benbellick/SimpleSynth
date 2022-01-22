@@ -1,8 +1,10 @@
 #include "breakpoints.hpp"
+#include <iostream>
 
 Breakpoints::Breakpoints(unsigned int sampleRate) :
     StreamInterface(sampleRate), 
     m_breakpoints(),
+    m_curTime(0.0),
     m_currentLocation(m_breakpoints.cbegin()) {}
 
 size_t Breakpoints::size() const {
@@ -10,6 +12,7 @@ size_t Breakpoints::size() const {
 }
 
 //TODO maybe change this to bool to see if there was an error?
+//Note that adding breakpoints will always reset iterator for now
 void Breakpoints::addBreakpoint(double time, double value) {
     /*
      * Retaining a sorting invariant here: all entires into Breakpoints must comply with following conditions:
@@ -19,6 +22,7 @@ void Breakpoints::addBreakpoint(double time, double value) {
     Breakpoint bkpt {time, value};
     if(!m_breakpoints.size()) {
         m_breakpoints.push_back(bkpt);
+        reset();
         return;
     }
     auto timeComp = [] (const Breakpoint& lhs, const Breakpoint& rhs) {return lhs.time < rhs.time;};
@@ -26,15 +30,34 @@ void Breakpoints::addBreakpoint(double time, double value) {
     if(candidateLocation->time == bkpt.time)
         return; //TODO maybe throw something here
     m_breakpoints.insert(candidateLocation, bkpt);
+    reset();
     return;
 }
 
 double Breakpoints::next() {
-    //TODO: implement
-    return -1000000;
+    if((m_curTime == m_currentLocation->time) ||
+       (m_curTime >= m_currentLocation->time
+        && (m_currentLocation+1) == m_breakpoints.cend())){
+        m_curTime += 1.0 / m_sampleRate;
+        return m_currentLocation->value;
+    } else if(m_curTime >= m_currentLocation->time){
+        const Breakpoint& curBrkpt = *m_currentLocation;
+        const Breakpoint& nextBrkpt = *(m_currentLocation+1);
+        double slope = (nextBrkpt.value - curBrkpt.value) / 
+                            (nextBrkpt.time - curBrkpt.time);
+        m_curTime+= 1.0 / m_sampleRate;
+        if(m_curTime >= (m_currentLocation+1)->time)
+            m_currentLocation += 1;
+        return curBrkpt.value + slope * (m_curTime - curBrkpt.time);
+    } else if(m_curTime <= m_currentLocation->time){
+        return -2;
+    }
+        return -1;
+        //throw an error here (bad state: curTime is before curLoc's time
 }
 void Breakpoints::reset() {
-    //TODO: implement
+    m_curTime = 0;
+    m_currentLocation = m_breakpoints.cbegin();
 }
 
 std::vector<double> Breakpoints::getTimes() const {

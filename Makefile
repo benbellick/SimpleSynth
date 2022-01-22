@@ -1,18 +1,22 @@
+#Compiler
 CXX = g++
 CC = g++
 CXXFLAGS = -std=c++17 
-OBJDIR = k
 
+#Dirs
 SRCDIR = src
 INCDIR = include
 OBJDIR = obj
 BINDIR = bin
 
+#Files
+OBJS = $(OBJDIR)/main.o $(OBJDIR)/osc.o $(OBJDIR)/breakpoints.o
+
 CXXFLAGS += -I$(INCDIR)
 
-$(BINDIR)/main: $(OBJDIR)/main.o $(OBJDIR)/osc.o $(OBJDIR)/breakpoints.o
+$(BINDIR)/main: $(OBJS)
 	@mkdir -p $(BINDIR)
-	$(CXX) $(CXXFLAGS) $(OBJDIR)/main.o $(OBJDIR)/osc.o $(OBJDIR)/breakpoints.o -o $(BINDIR)/main
+	$(CXX) $(CXXFLAGS) $(OBJS) -o $(BINDIR)/main
 
 $(OBJDIR)/main.o: $(SRCDIR)/main.cpp $(INCDIR)/osc.hpp $(INCDIR)/breakpoints.hpp
 	@mkdir -p $(OBJDIR)

@@ -21,4 +21,5 @@ class Breakpoints : public StreamInterface<double> {
 
         std::vector<Breakpoint> m_breakpoints;
         std::vector<Breakpoint>::const_iterator m_currentLocation;
+        double m_curTime;
 };
