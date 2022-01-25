@@ -40,20 +40,22 @@ double Breakpoints::next() {
         && (m_currentLocation+1) == m_breakpoints.cend())){
         m_curTime += 1.0 / m_sampleRate;
         return m_currentLocation->value;
-    } else if(m_curTime >= m_currentLocation->time){
+    } 
+    else if(m_curTime >= m_currentLocation->time){
         const Breakpoint& curBrkpt = *m_currentLocation;
         const Breakpoint& nextBrkpt = *(m_currentLocation+1);
         double slope = (nextBrkpt.value - curBrkpt.value) / 
                             (nextBrkpt.time - curBrkpt.time);
+        double interpValue = curBrkpt.value + slope * (m_curTime - curBrkpt.time);
         m_curTime+= 1.0 / m_sampleRate;
         if(m_curTime >= (m_currentLocation+1)->time)
             m_currentLocation += 1;
-        return curBrkpt.value + slope * (m_curTime - curBrkpt.time);
+        return interpValue;
     } else if(m_curTime <= m_currentLocation->time){
-        return -2;
-    }
         return -1;
-        //throw an error here (bad state: curTime is before curLoc's time
+    }
+    //throw an error here (bad state: curTime is before curLoc's time
+    return -1;
 }
 void Breakpoints::reset() {
     m_curTime = 0;
