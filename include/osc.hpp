@@ -5,6 +5,7 @@
 class Osc : public StreamInterface<double> {
     public:
         Osc(unsigned long srate);
+        const double getFreq() const;
         void updateFreq(double freq);
         double next() override;
         void reset() override;

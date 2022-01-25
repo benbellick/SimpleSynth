@@ -1,31 +1,41 @@
 #include <iostream>
 #include <memory>
-#include <sndfile.h>
+#include <sndfile.hh>
 
 #include "osc.hpp"
-#include "breakpoints.hpp"
+#include "envelope.hpp"
 
 int main() {
-    std::shared_ptr<Osc> osc = std::make_shared<Osc>(44100);
+    constexpr unsigned int sampleRate = 44100;
+    std::shared_ptr<Osc> osc = std::make_shared<Osc>(sampleRate);
     osc->updateFreq(440);
     /*
     for(size_t i=0; i<1000; ++i)
         std::cout << i << "\t" << osc->next() << std::endl;
     */
 
-    std::shared_ptr<Envelope> brkpts = std::make_shared<Envelope>(50);
-    brkpts->addBreakpoint(0.0, 0.0);
-    brkpts->addBreakpoint(0.1, 0.1);
-    brkpts->addBreakpoint(0.2, 0.2);
-    brkpts->addBreakpoint(0.3, 0.3);
-    brkpts->reset();
-    auto times = brkpts->getTimes();
-    std::cout << "size: " << times.size() << std::endl;
-    for (const double& t : times)
-        std::cout << t << std::endl;
+    std::shared_ptr<Envelope> freqEnv = std::make_shared<Envelope>(sampleRate);
+    freqEnv->addBreakpoint(0, 40);
+    freqEnv->addBreakpoint(0.5, 880);
+    freqEnv->addBreakpoint(1, 1000);
 
-    std::cout << "brkpt stream vals: " << std::endl;
-    for(size_t i=0; i<10; ++i)
-        std::cout << brkpts->next() << std::endl;
+    std::shared_ptr<Envelope> ampEnv = std::make_shared<Envelope>(sampleRate);
+    ampEnv->addBreakpoint(0,0);
+    ampEnv->addBreakpoint(0.2,1);
+    ampEnv->addBreakpoint(1,0);
+
+    for(size_t i=0; i<44100; ++i){
+        double freq = freqEnv->next();
+        osc->updateFreq(freqEnv->next());
+        std::cout << osc->next() * ampEnv->next() << std::endl;
+    }
+
+    SndfileHandle file;
+    int channels = 1;
+    std::string fileName = "sine.wav";
+    std::cout << sf_version_string() << std::endl;
+
+    file = SndfileHandle(fileName, SFM_WRITE, SF_FORMAT_WAV, channels, sampleRate);
+
     return 0;
 }

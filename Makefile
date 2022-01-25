@@ -2,6 +2,7 @@
 CXX = g++
 CC = g++
 CXXFLAGS = -std=c++17 
+LDFLAGS = -lsndFile
 
 #Dirs
 SRCDIR = src
@@ -16,7 +17,7 @@ CXXFLAGS += -I$(INCDIR)
 
 $(BINDIR)/main: $(OBJS)
 	@mkdir -p $(BINDIR)
-	$(CXX) $(CXXFLAGS) $(OBJS) -o $(BINDIR)/main
+	$(CXX) $(LDFLAGS) $(OBJS) -o $(BINDIR)/main
 
 $(OBJDIR)/main.o: $(SRCDIR)/main.cpp $(INCDIR)/osc.hpp $(INCDIR)/envelope.hpp
 	@mkdir -p $(OBJDIR)
