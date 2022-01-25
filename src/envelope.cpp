@@ -1,21 +1,20 @@
-#include "breakpoints.hpp"
-#include <iostream>
+#include "envelope.hpp"
 
-Breakpoints::Breakpoints(unsigned int sampleRate) :
+Envelope::Envelope(unsigned int sampleRate) :
     StreamInterface(sampleRate), 
     m_breakpoints(),
     m_curTime(0.0),
     m_currentLocation(m_breakpoints.cbegin()) {}
 
-size_t Breakpoints::size() const {
+size_t Envelope::size() const {
     return m_breakpoints.size();
 }
 
 //TODO maybe change this to bool to see if there was an error?
 //Note that adding breakpoints will always reset iterator for now
-void Breakpoints::addBreakpoint(double time, double value) {
+void Envelope::addBreakpoint(double time, double value) {
     /*
-     * Retaining a sorting invariant here: all entires into Breakpoints must comply with following conditions:
+     * Retaining a sorting invariant here: all entires into Envelope must comply with following conditions:
      * 1) Sorted by time
      * 2) no common time values
      */
@@ -34,7 +33,7 @@ void Breakpoints::addBreakpoint(double time, double value) {
     return;
 }
 
-double Breakpoints::next() {
+double Envelope::next() {
     if((m_curTime == m_currentLocation->time) ||
        (m_curTime >= m_currentLocation->time
         && (m_currentLocation+1) == m_breakpoints.cend())){
@@ -49,7 +48,7 @@ double Breakpoints::next() {
         double interpValue = curBrkpt.value + slope * (m_curTime - curBrkpt.time);
         m_curTime+= 1.0 / m_sampleRate;
         if(m_curTime >= (m_currentLocation+1)->time)
-            m_currentLocation += 1;
+            m_currentLocation++;
         return interpValue;
     } else if(m_curTime <= m_currentLocation->time){
         return -1;
@@ -57,12 +56,12 @@ double Breakpoints::next() {
     //throw an error here (bad state: curTime is before curLoc's time
     return -1;
 }
-void Breakpoints::reset() {
+void Envelope::reset() {
     m_curTime = 0;
     m_currentLocation = m_breakpoints.cbegin();
 }
 
-std::vector<double> Breakpoints::getTimes() const {
+std::vector<double> Envelope::getTimes() const {
     std::vector<double> times;
     std::for_each(
         m_breakpoints.cbegin(), 

@@ -13,7 +13,7 @@ int main() {
         std::cout << i << "\t" << osc->next() << std::endl;
     */
 
-    std::shared_ptr<Breakpoints> brkpts = std::make_shared<Breakpoints>(50);
+    std::shared_ptr<Envelope> brkpts = std::make_shared<Envelope>(50);
     brkpts->addBreakpoint(0.0, 0.0);
     brkpts->addBreakpoint(0.1, 0.1);
     brkpts->addBreakpoint(0.2, 0.2);

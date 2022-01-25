@@ -4,9 +4,9 @@
 
 #include "stream_interface.hpp"
 
-class Breakpoints : public StreamInterface<double> {
+class Envelope : public StreamInterface<double> {
     public:
-        Breakpoints(unsigned int sampleRate);
+        Envelope(unsigned int sampleRate);
         size_t size() const;
         double next() override;
         void reset() override;

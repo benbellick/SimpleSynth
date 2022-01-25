@@ -10,7 +10,7 @@ OBJDIR = obj
 BINDIR = bin
 
 #Files
-OBJS = $(OBJDIR)/main.o $(OBJDIR)/osc.o $(OBJDIR)/breakpoints.o
+OBJS = $(OBJDIR)/main.o $(OBJDIR)/osc.o $(OBJDIR)/envelope.o
 
 CXXFLAGS += -I$(INCDIR)
 
@@ -18,13 +18,13 @@ $(BINDIR)/main: $(OBJS)
 	@mkdir -p $(BINDIR)
 	$(CXX) $(CXXFLAGS) $(OBJS) -o $(BINDIR)/main
 
-$(OBJDIR)/main.o: $(SRCDIR)/main.cpp $(INCDIR)/osc.hpp $(INCDIR)/breakpoints.hpp
+$(OBJDIR)/main.o: $(SRCDIR)/main.cpp $(INCDIR)/osc.hpp $(INCDIR)/envelope.hpp
 	@mkdir -p $(OBJDIR)
 	$(CXX) -c $(CXXFLAGS) $(SRCDIR)/main.cpp -o $(OBJDIR)/main.o
 
-$(OBJDIR)/breakpoints.o: $(SRCDIR)/breakpoints.cpp $(INCDIR)/breakpoints.hpp $(INCDIR)/stream_interface.hpp
+$(OBJDIR)/envelope.o: $(SRCDIR)/envelope.cpp $(INCDIR)/envelope.hpp $(INCDIR)/stream_interface.hpp
 	@mkdir -p $(OBJDIR)
-	$(CXX) -c $(CXXFLAGS) $(SRCDIR)/breakpoints.cpp -o $(OBJDIR)/breakpoints.o
+	$(CXX) -c $(CXXFLAGS) $(SRCDIR)/envelope.cpp -o $(OBJDIR)/envelope.o
 
 $(OBJDIR)/osc.o: $(SRCDIR)/osc.cpp $(INCDIR)/osc.hpp $(INCDIR)/stream_interface.hpp
 	@mkdir -p $(OBJDIR)
