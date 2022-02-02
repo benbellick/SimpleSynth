@@ -1,7 +1,7 @@
 #include "envelope.hpp"
 
-Envelope::Envelope(unsigned int sampleRate) :
-    StreamInterface(sampleRate), 
+Envelope::Envelope() :
+    StreamInterface(), 
     m_breakpoints(),
     m_curTime(0.0),
     m_currentLocation(m_breakpoints.cbegin()) {}
@@ -37,7 +37,7 @@ double Envelope::next() {
     if((m_curTime == m_currentLocation->time) ||
        (m_curTime >= m_currentLocation->time
         && (m_currentLocation+1) == m_breakpoints.cend())){
-        m_curTime += 1.0 / m_sampleRate;
+        m_curTime += 1.0 / s_sampleRate;
         return m_currentLocation->value;
     } 
     else if(m_curTime >= m_currentLocation->time){
@@ -46,7 +46,7 @@ double Envelope::next() {
         double slope = (nextBrkpt.value - curBrkpt.value) / 
                             (nextBrkpt.time - curBrkpt.time);
         double interpValue = curBrkpt.value + slope * (m_curTime - curBrkpt.time);
-        m_curTime+= 1.0 / m_sampleRate;
+        m_curTime+= 1.0 / s_sampleRate;
         if(m_curTime >= (m_currentLocation+1)->time)
             m_currentLocation++;
         return interpValue;

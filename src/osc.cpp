@@ -2,8 +2,8 @@
 #include <iostream>
 #include "osc.hpp"
 
-Osc::Osc(unsigned long srate) :
-    StreamInterface(srate),
+Osc::Osc() :
+    StreamInterface(),
     m_curFreq(0),
     m_curPhase(0),
     m_incr(0){}
@@ -13,7 +13,7 @@ const double Osc::getFreq() const {
 }
 void Osc::updateFreq(double freq) {
     m_curFreq = freq;
-    m_incr = freq * 2 * M_PI / m_sampleRate;
+    m_incr = freq * 2 * M_PI / s_sampleRate;
 }
 
 double Osc::next(){
