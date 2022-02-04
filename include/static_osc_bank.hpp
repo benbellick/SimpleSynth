@@ -15,6 +15,11 @@ class StaticOscBank : public StreamInterface {
         double next() override;
         void reset() override;
         void updateFreq(double freq);
+
+        enum InterpType {
+            Exact,
+            LinearInterp
+        };
     private:
         const unsigned int m_numOfOscs;
         double m_curFreq;

@@ -4,7 +4,12 @@
 //For now, we assume sin, we will alter later
 class Osc : public StreamInterface {
     public:
-        Osc();
+        enum InterpType {
+            Exact,
+            LinearInterp
+        };
+
+        Osc(InterpType interpType = Exact);
         const double getFreq() const;
         void updateFreq(double freq);
         double next() override;
@@ -14,4 +19,5 @@ class Osc : public StreamInterface {
         double m_curFreq;
         double m_curPhase;
         double m_incr;
+        const InterpType m_interpType;
 };
