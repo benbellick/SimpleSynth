@@ -9,19 +9,21 @@
 
 const unsigned int StreamInterface::s_sampleRate = 44100;
 int main() {
-    std::vector<double> relAmps {1.0, 1/2.0, 1/3.0, 1/4.0};
-    std::vector<double> relFreqs {1, 2, 3, 4};
+    int numOfOscs = 20;
+    std::vector<double> relAmps;
+    std::vector<double> relFreqs;
+    for(int i=1; i<=numOfOscs;++i)
+        relAmps.push_back(1.0/i), relFreqs.push_back(i);
     std::shared_ptr<StaticOscBank> osc = std::make_shared<StaticOscBank>(
-        4,
+        numOfOscs,
         relAmps,
         relFreqs
     );
     osc->updateFreq(440);
 
     std::shared_ptr<Envelope> freqEnv = std::make_shared<Envelope>();
-    freqEnv->addBreakpoint(0, 40);
-    freqEnv->addBreakpoint(0.5, 880);
-    freqEnv->addBreakpoint(1, 1000);
+    freqEnv->addBreakpoint(0, 440);
+    freqEnv->addBreakpoint(1, 20000);
 
     std::shared_ptr<Envelope> ampEnv = std::make_shared<Envelope>();
     ampEnv->addBreakpoint(0,1);
