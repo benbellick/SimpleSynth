@@ -1,19 +1,20 @@
 #include <math.h>
-#include <iostream>
+
 #include "osc.hpp"
 
 Osc::Osc() :
     StreamInterface(),
-    m_curFreq(0),
-    m_curPhase(0),
-    m_incr(0){}
+    m_curFreq(0.0),
+    m_curPhase(0.0),
+    m_incr(0){
+    }
 
 const double Osc::getFreq() const {
     return m_curFreq;
 }
 void Osc::updateFreq(double freq) {
     m_curFreq = freq;
-    m_incr = freq * 2 * M_PI / s_sampleRate;
+    m_incr = m_curFreq * 2 * M_PI / s_sampleRate;
 }
 
 double Osc::next(){
