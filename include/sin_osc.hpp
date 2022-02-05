@@ -2,9 +2,9 @@
 #include "stream_interface.hpp"
 
 //For now, we assume sin, we will alter later
-class Osc : public StreamInterface {
+class SinOsc : public StreamInterface {
     public:
-        Osc();
+        SinOsc();
         const double getFreq() const;
         void updateFreq(double freq);
         double next() override;

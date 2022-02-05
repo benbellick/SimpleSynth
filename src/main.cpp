@@ -5,7 +5,7 @@
 
 #include "envelope.hpp"
 #include "lookup_osc.hpp"
-#include "osc.hpp"
+#include "sin_osc.hpp"
 #include "static_osc_bank.hpp"
 #include "stream_interface.hpp"
 

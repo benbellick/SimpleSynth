@@ -19,7 +19,7 @@ StaticOscBank::StaticOscBank(
     m_highCutFreq(highCutFreq){
     //TODO: Throw if there is a number mismatch between all of the sizes
     for(unsigned int i=0; i<numOfOscs; ++i) {
-        m_oscs.at(i) = std::make_unique<Osc>();
+        m_oscs.at(i) = std::make_unique<SinOsc>();
     }
 }
 
@@ -30,7 +30,7 @@ double StaticOscBank::next() {
         m_oscs.begin(),
         m_oscs.end(),
         vals.begin(),
-        [idx=0, this](std::unique_ptr<Osc>& osc) mutable -> double {
+        [idx=0, this](std::unique_ptr<SinOsc>& osc) mutable -> double {
             double curFreq = osc->getFreq();
             double val = m_relativeAmps.at(idx++) * osc->next();
             return m_lowCutFreq <= curFreq && curFreq <= m_highCutFreq ?
@@ -50,7 +50,7 @@ void StaticOscBank::reset() {
     std::for_each(
         m_oscs.begin(), 
         m_oscs.end(), 
-        [](std::unique_ptr<Osc>& osc) {osc->reset();}
+        [](std::unique_ptr<SinOsc>& osc) {osc->reset();}
     );
 }
 
@@ -59,7 +59,7 @@ void StaticOscBank::updateFreq(double freq){
     std::for_each(
         m_oscs.begin(),
         m_oscs.end(),
-        [idx=0, this](std::unique_ptr<Osc>& osc) mutable {
+        [idx=0, this](std::unique_ptr<SinOsc>& osc) mutable {
             osc->updateFreq(m_relativeFreqs.at(idx++) * m_curFreq);
         }
     );

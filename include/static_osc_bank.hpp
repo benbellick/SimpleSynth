@@ -1,7 +1,7 @@
 #include <vector>
 
 #include "stream_interface.hpp"
-#include "osc.hpp"
+#include "sin_osc.hpp"
 
 class StaticOscBank : public StreamInterface {
     public:
@@ -18,7 +18,7 @@ class StaticOscBank : public StreamInterface {
     private:
         const unsigned int m_numOfOscs;
         double m_curFreq;
-        std::vector<std::unique_ptr<Osc>> m_oscs;
+        std::vector<std::unique_ptr<SinOsc>> m_oscs;
         std::vector<double> m_relativeAmps;
         std::vector<double> m_relativeFreqs; //relative to base freq multiplicative
         const double m_lowCutFreq;
