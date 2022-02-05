@@ -11,7 +11,7 @@ OBJDIR = obj
 BINDIR = bin
 
 #Files
-OBJS = $(OBJDIR)/main.o $(OBJDIR)/osc.o $(OBJDIR)/envelope.o $(OBJDIR)/static_osc_bank.o
+OBJS = $(OBJDIR)/main.o $(OBJDIR)/osc.o $(OBJDIR)/envelope.o $(OBJDIR)/static_osc_bank.o $(OBJDIR)/lookup_osc.o
 
 CXXFLAGS += -I$(INCDIR)
 
@@ -30,6 +30,10 @@ $(OBJDIR)/envelope.o: $(SRCDIR)/envelope.cpp $(INCDIR)/envelope.hpp $(INCDIR)/st
 $(OBJDIR)/static_osc_bank.o: $(SRCDIR)/static_osc_bank.cpp $(INCDIR)/static_osc_bank.hpp $(INCDIR)/stream_interface.hpp $(INCDIR)/osc.hpp
 	@mkdir -p $(OBJDIR)
 	$(CXX) -c $(CXXFLAGS) $(SRCDIR)/static_osc_bank.cpp -o $(OBJDIR)/static_osc_bank.o
+
+$(OBJDIR)/lookup_osc.o: $(SRCDIR)/lookup_osc.cpp $(INCDIR)/lookup_osc.hpp $(INCDIR)/stream_interface.hpp
+	@mkdir -p $(OBJDIR)
+	$(CXX) -c $(CXXFLAGS) $(SRCDIR)/lookup_osc.cpp -o $(OBJDIR)/lookup_osc.o
 
 $(OBJDIR)/osc.o: $(SRCDIR)/osc.cpp $(INCDIR)/osc.hpp $(INCDIR)/stream_interface.hpp
 	@mkdir -p $(OBJDIR)
