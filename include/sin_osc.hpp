@@ -5,6 +5,7 @@
 class SinOsc : public Osc {
     public:
         SinOsc();
+        ~SinOsc() {};
         double getFreq() const override;
         void updateFreq(double freq) override;
         double next() override;

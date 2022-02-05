@@ -2,7 +2,7 @@
 
 class StreamInterface {
     public:
-        StreamInterface() {};
+        virtual ~StreamInterface() {};
         virtual double next() = 0;
         virtual void reset() = 0;
     public:

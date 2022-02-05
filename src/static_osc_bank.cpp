@@ -2,6 +2,7 @@
 #include <numeric>
 
 #include "static_osc_bank.hpp"
+#include "sin_osc.hpp"
 
 StaticOscBank::StaticOscBank(
     const unsigned int numOfOscs,
@@ -23,6 +24,31 @@ StaticOscBank::StaticOscBank(
     }
 }
 
+StaticOscBank::StaticOscBank(
+    const unsigned int numOfOscs,
+    const std::vector<double>& relativeAmps,
+    const std::vector<double>& relativeFreqs,
+    const std::shared_ptr<const std::vector<double>> lookupTable,
+    const LookupOsc::InterpType interpType,
+    const double lowCutFreq,
+    const double highCutFreq
+) :
+    Osc(),
+    m_numOfOscs(numOfOscs),
+    m_relativeAmps(relativeAmps),
+    m_relativeFreqs(relativeFreqs),
+    m_oscs(m_numOfOscs),
+    m_lowCutFreq(lowCutFreq),
+    m_highCutFreq(highCutFreq){
+    //TODO: Throw if there is a number mismatch between all of the sizes
+    for(unsigned int i=0; i<numOfOscs; ++i) {
+        m_oscs.at(i) = std::make_unique<LookupOsc>(
+            lookupTable,
+            interpType
+        );
+    }
+}
+
 double StaticOscBank::next() {
     //TODO: make this into transform_reduce call?
     std::vector<double> vals(m_oscs.size());
@@ -30,7 +56,7 @@ double StaticOscBank::next() {
         m_oscs.begin(),
         m_oscs.end(),
         vals.begin(),
-        [idx=0, this](std::unique_ptr<SinOsc>& osc) mutable -> double {
+        [idx=0, this](std::unique_ptr<Osc>& osc) mutable -> double {
             double curFreq = osc->getFreq();
             double val = m_relativeAmps.at(idx++) * osc->next();
             return m_lowCutFreq <= curFreq && curFreq <= m_highCutFreq ?
@@ -50,7 +76,7 @@ void StaticOscBank::reset() {
     std::for_each(
         m_oscs.begin(), 
         m_oscs.end(), 
-        [](std::unique_ptr<SinOsc>& osc) {osc->reset();}
+        [](std::unique_ptr<Osc>& osc) {osc->reset();}
     );
 }
 
@@ -63,7 +89,7 @@ void StaticOscBank::updateFreq(double freq){
     std::for_each(
         m_oscs.begin(),
         m_oscs.end(),
-        [idx=0, this](std::unique_ptr<SinOsc>& osc) mutable {
+        [idx=0, this](std::unique_ptr<Osc>& osc) mutable {
             osc->updateFreq(m_relativeFreqs.at(idx++) * m_curFreq);
         }
     );

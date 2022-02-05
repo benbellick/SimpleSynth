@@ -7,6 +7,7 @@
 class Envelope : public StreamInterface {
     public:
         Envelope();
+        ~Envelope() {};
         size_t size() const;
         double next() override;
         void reset() override;
