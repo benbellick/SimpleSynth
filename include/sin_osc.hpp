@@ -1,17 +1,14 @@
 #pragma once
+#include "osc_interface.hpp"
 #include "stream_interface.hpp"
 
-//For now, we assume sin, we will alter later
-class SinOsc : public StreamInterface {
+class SinOsc : public Osc {
     public:
         SinOsc();
-        const double getFreq() const;
-        void updateFreq(double freq);
+        double getFreq() const override;
+        void updateFreq(double freq) override;
         double next() override;
         void reset() override;
     private:
         void boundCurPhase();
-        double m_curFreq;
-        double m_curPhase;
-        double m_incr;
 };

@@ -3,12 +3,9 @@
 #include "sin_osc.hpp"
 
 SinOsc::SinOsc() :
-    StreamInterface(),
-    m_curFreq(0.0),
-    m_curPhase(0.0),
-    m_incr(0){}
+    Osc(){}
 
-const double SinOsc::getFreq() const {
+double SinOsc::getFreq() const {
     return m_curFreq;
 }
 void SinOsc::updateFreq(double freq) {
@@ -25,7 +22,7 @@ double SinOsc::next(){
 }
 
 void SinOsc::reset(){
-    //TODO: implement
+    m_curPhase = 0.0;
 }
 
 void SinOsc::boundCurPhase() {

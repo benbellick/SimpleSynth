@@ -1,10 +1,8 @@
 #pragma once
 #include <vector>
-#include "stream_interface.hpp"
+#include "osc_interface.hpp"
 
-
-//For now, we assume sin, we will alter later
-class LookupOsc : public StreamInterface {
+class LookupOsc : public Osc {
     public:
         enum InterpType {
             Truncate,
@@ -14,8 +12,8 @@ class LookupOsc : public StreamInterface {
             std::shared_ptr<const std::vector<double>> lookupTable,
             InterpType interpType = LinearInterp
         );
-        double getFreq() const;
-        void updateFreq(double freq);
+        double getFreq() const override;
+        void updateFreq(double freq) override;
         double next() override;
         void reset() override;
     private:

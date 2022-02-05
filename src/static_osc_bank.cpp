@@ -10,7 +10,7 @@ StaticOscBank::StaticOscBank(
     const double lowCutFreq,
     const double highCutFreq
 ) :
-    StreamInterface(),
+    Osc(),
     m_numOfOscs(numOfOscs),
     m_relativeAmps(relativeAmps),
     m_relativeFreqs(relativeFreqs),
@@ -52,6 +52,10 @@ void StaticOscBank::reset() {
         m_oscs.end(), 
         [](std::unique_ptr<SinOsc>& osc) {osc->reset();}
     );
+}
+
+double StaticOscBank::getFreq() const {
+    return m_curFreq;
 }
 
 void StaticOscBank::updateFreq(double freq){

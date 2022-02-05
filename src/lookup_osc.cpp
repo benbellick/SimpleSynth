@@ -9,8 +9,7 @@ LookupOsc::LookupOsc(
     m_curPhase(0),
     m_incr(0),
     m_interpType(interpType),
-    m_lookupTable(lookupTable)
-    {}
+    m_lookupTable(lookupTable){}
 
 double LookupOsc::getFreq() const {
     return m_curFreq;
@@ -43,7 +42,7 @@ double LookupOsc::next() {
 }
 
 void LookupOsc::reset() {
-    //TODO: implement
+    m_curPhase = 0.0;
 }
 
 void LookupOsc::boundCurPhase() {

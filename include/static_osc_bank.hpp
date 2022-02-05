@@ -1,9 +1,9 @@
 #include <vector>
 
-#include "stream_interface.hpp"
+#include "osc_interface.hpp"
 #include "sin_osc.hpp"
 
-class StaticOscBank : public StreamInterface {
+class StaticOscBank : public Osc {
     public:
         StaticOscBank(
             const unsigned int numOfOscs,
@@ -14,7 +14,8 @@ class StaticOscBank : public StreamInterface {
         );
         double next() override;
         void reset() override;
-        void updateFreq(double freq);
+        double getFreq() const override;
+        void updateFreq(double freq) override;
     private:
         const unsigned int m_numOfOscs;
         double m_curFreq;
