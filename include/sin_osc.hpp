@@ -1,6 +1,5 @@
 #pragma once
 #include "osc_interface.hpp"
-#include "stream_interface.hpp"
 
 class SinOsc : public Osc {
     public:
