@@ -3,7 +3,7 @@
 
 LookupOsc::LookupOsc(
     std::shared_ptr<const std::vector<double>> lookupTable,
-    LookupOsc::InterpType interpType
+    Enums::InterpType interpType
 ):
     m_curFreq(0),
     m_curPhase(0),
@@ -23,10 +23,10 @@ void LookupOsc::updateFreq(const double freq){
 double LookupOsc::next() {
     double tickVal(0);
     switch(m_interpType){
-    case(Truncate):
+    case(Enums::InterpType::Truncate):
         tickVal = m_lookupTable->at((int) m_curPhase);
         break;
-    case(LinearInterp):
+    case(Enums::InterpType::Linear):
         int left = (int) m_curPhase;
         int right = left+1;
         double diff = m_curPhase - left;

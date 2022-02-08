@@ -29,7 +29,7 @@ StaticOscBank::StaticOscBank(
     const std::vector<double>& relativeAmps,
     const std::vector<double>& relativeFreqs,
     const std::shared_ptr<const std::vector<double>> lookupTable,
-    const LookupOsc::InterpType interpType,
+    const Enums::InterpType interpType,
     const double lowCutFreq,
     const double highCutFreq
 ) :

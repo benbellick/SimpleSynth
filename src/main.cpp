@@ -8,10 +8,11 @@
 #include "sin_osc.hpp"
 #include "static_osc_bank.hpp"
 #include "stream_interface.hpp"
+#include "mono_synth.hpp"
 
 const unsigned int StreamInterface::s_sampleRate = 44100;
 int main() {
-    //osc test
+    //Osc bank construction
     int numOfOscs = 20;
     std::vector<double> relAmps;
     std::vector<double> relFreqs;
@@ -22,15 +23,27 @@ int main() {
         relAmps,
         relFreqs
     );
-    osc->updateFreq(440);
-
-    std::shared_ptr<Envelope> freqEnv = std::make_shared<Envelope>();
-    freqEnv->addBreakpoint(0, 440);
-    freqEnv->addBreakpoint(1, 20000);
 
     std::shared_ptr<Envelope> ampEnv = std::make_shared<Envelope>();
     ampEnv->addBreakpoint(0,1);
-    ampEnv->addBreakpoint(1,0);
+    ampEnv->addBreakpoint(0.5,0);
+    ampEnv->addBreakpoint(1,1);
+    ampEnv->addBreakpoint(1.5,0);
+    ampEnv->addBreakpoint(2,1);
+    ampEnv->addBreakpoint(2.5,0);
+
+    //TODO: Implement Truncate
+    std::shared_ptr<Envelope> freqEnv = std::make_shared<Envelope>(Enums::InterpType::Linear);
+    freqEnv->addBreakpoint(0, 440);
+    freqEnv->addBreakpoint(1, 880);
+    freqEnv->addBreakpoint(2, 880 * 1.5);
+
+
+    std::shared_ptr<MonoSynth> synth = std::make_shared<MonoSynth>(
+        osc,
+        ampEnv,
+        freqEnv
+    );
 
     SndfileHandle file;
     int channels = 1;
@@ -38,20 +51,21 @@ int main() {
     const int format = SF_FORMAT_WAV | SF_FORMAT_DOUBLE;
     file = SndfileHandle(fileName, SFM_WRITE, format, channels, StreamInterface::s_sampleRate);
     
-    double buf[StreamInterface::s_sampleRate];
-    for(int i=0; i<StreamInterface::s_sampleRate; ++i) {
-        buf[i] = ampEnv->next() * osc->next();
-        osc->updateFreq(freqEnv->next());
+    int numOfSecs = 3;
+    double buf[StreamInterface::s_sampleRate * numOfSecs];
+    for(int i=0; i<StreamInterface::s_sampleRate * numOfSecs; ++i) {
+        buf[i] = synth->next();
     }
-    file.write(buf, StreamInterface::s_sampleRate);
+    file.write(buf, StreamInterface::s_sampleRate * numOfSecs);
 
+    /*
     std::shared_ptr<std::vector<double>> sinTable = std::make_shared<std::vector<double>>();
     const int tableLength = 100;
     for(int i=0; i<tableLength; ++i)
         sinTable->push_back(sin(2 * M_PI * i / tableLength));
     std::shared_ptr<LookupOsc> sinLkpOsc = std::make_shared<LookupOsc>(
         sinTable,
-        LookupOsc::LinearInterp
+        Enums::InterpType::Linear
     );
     //TODO: should def throw if freq is 0
     sinLkpOsc->updateFreq(440);
@@ -67,4 +81,5 @@ int main() {
     file2.write(buf2, StreamInterface::s_sampleRate);
 
     return 0;
+    */
 }

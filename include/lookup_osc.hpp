@@ -1,16 +1,13 @@
 #pragma once
 #include <vector>
 #include "osc_interface.hpp"
+#include "enums.hpp"
 
 class LookupOsc : public Osc {
     public:
-        enum InterpType {
-            Truncate,
-            LinearInterp
-        };
         LookupOsc(
             std::shared_ptr<const std::vector<double>> lookupTable,
-            InterpType interpType = LinearInterp
+            Enums::InterpType interpType = Enums::InterpType::Linear
         );
         double getFreq() const override;
         void updateFreq(double freq) override;
@@ -21,7 +18,7 @@ class LookupOsc : public Osc {
         double m_curFreq;
         double m_curPhase;
         double m_incr;
-        const InterpType m_interpType;
+        const Enums::InterpType m_interpType;
         //TODO: Later maybe find a way to make this an array, as
         //we don't need the dynamic ability of vector. However,
         //it is easier for now. In fact, should be made into its own

@@ -1,7 +1,10 @@
 #include "envelope.hpp"
 
-Envelope::Envelope() :
+Envelope::Envelope(
+    Enums::InterpType interpType
+) :
     StreamInterface(), 
+    m_interpType(interpType),
     m_breakpoints(),
     m_curTime(0.0),
     m_currentLocation(m_breakpoints.cbegin()) {}
@@ -34,24 +37,31 @@ void Envelope::addBreakpoint(double time, double value) {
 }
 
 double Envelope::next() {
-    if((m_curTime == m_currentLocation->time) ||
-       (m_curTime >= m_currentLocation->time
-        && (m_currentLocation+1) == m_breakpoints.cend())){
-        m_curTime += 1.0 / s_sampleRate;
-        return m_currentLocation->value;
-    } 
-    else if(m_curTime >= m_currentLocation->time){
-        const Breakpoint& curBrkpt = *m_currentLocation;
-        const Breakpoint& nextBrkpt = *(m_currentLocation+1);
-        double slope = (nextBrkpt.value - curBrkpt.value) / 
-                            (nextBrkpt.time - curBrkpt.time);
-        double interpValue = curBrkpt.value + slope * (m_curTime - curBrkpt.time);
-        m_curTime+= 1.0 / s_sampleRate;
-        if(m_curTime >= (m_currentLocation+1)->time)
-            m_currentLocation++;
-        return interpValue;
-    } else if(m_curTime <= m_currentLocation->time){
-        return -1;
+    switch(m_interpType){
+    case(Enums::InterpType::Truncate):
+        //TODO throw
+        return -2;
+    case(Enums::InterpType::Linear):
+        if((m_curTime == m_currentLocation->time) ||
+           (m_curTime >= m_currentLocation->time
+            && (m_currentLocation+1) == m_breakpoints.cend())){
+            m_curTime += 1.0 / s_sampleRate;
+            return m_currentLocation->value;
+        } 
+        else if(m_curTime >= m_currentLocation->time){
+            const Breakpoint& curBrkpt = *m_currentLocation;
+            const Breakpoint& nextBrkpt = *(m_currentLocation+1);
+            double slope = (nextBrkpt.value - curBrkpt.value) / 
+                                (nextBrkpt.time - curBrkpt.time);
+            double interpValue = curBrkpt.value + slope * (m_curTime - curBrkpt.time);
+            m_curTime+= 1.0 / s_sampleRate;
+            if(m_curTime >= (m_currentLocation+1)->time)
+                m_currentLocation++;
+            return interpValue;
+        } else if(m_curTime <= m_currentLocation->time){
+            return -1;
+        }
+        break;
     }
     //throw an error here (bad state: curTime is before curLoc's time
     return -1;

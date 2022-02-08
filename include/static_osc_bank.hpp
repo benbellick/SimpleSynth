@@ -18,7 +18,7 @@ class StaticOscBank : public Osc {
             const std::vector<double>& relativeAmps,
             const std::vector<double>& relativeFreqs,
             const std::shared_ptr<const std::vector<double>> lookupTable,
-            const LookupOsc::InterpType interpType = LookupOsc::LinearInterp,
+            const Enums::InterpType interpType = Enums::InterpType::Linear,
             const double lowCutFreq = 20,
             const double highCutFreq = 20000
         );
