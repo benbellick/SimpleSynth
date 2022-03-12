@@ -14,6 +14,12 @@ double MonoSynth::next() {
     return m_ampEnvelope->next() * m_osc->next();
 }
 
+void MonoSynth::next(Buffer<double>& buffer) {
+    //TODO: improve?
+    for(size_t i=0; i<buffer.size(); ++i)
+        buffer[i]=next();
+}
+
 void MonoSynth::reset() {
     m_osc->reset();
     m_ampEnvelope->reset();

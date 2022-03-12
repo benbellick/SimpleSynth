@@ -72,6 +72,12 @@ double StaticOscBank::next() {
     return 0;
 }
 
+void StaticOscBank::next(Buffer<double>& buffer) {
+    //TODO: Also consider if this implementation is optimal
+    for(size_t i=0; i<buffer.size(); ++i)
+        buffer[i]=next();
+}
+
 void StaticOscBank::reset() {
     std::for_each(
         m_oscs.begin(), 

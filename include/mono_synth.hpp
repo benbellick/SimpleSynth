@@ -11,6 +11,7 @@ class MonoSynth : public StreamInterface {
             std::shared_ptr<StreamInterface> freqEnvelope
         );
         double next() override;
+        void next(Buffer<double>& buffer) override;
         void reset() override;
     private:
         std::shared_ptr<Osc> m_osc;

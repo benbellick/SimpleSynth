@@ -8,6 +8,7 @@ class SinOsc : public Osc {
         double getFreq() const override;
         void updateFreq(double freq) override;
         double next() override;
+        void next(Buffer<double>& buffer) override;
         void reset() override;
     private:
         void boundCurPhase();

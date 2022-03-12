@@ -13,6 +13,7 @@ class Envelope : public StreamInterface {
         ~Envelope() {};
         size_t size() const;
         double next() override;
+        void next(Buffer<double>& buffer) override;
         void reset() override;
         void addBreakpoint(double time, double value);
         std::vector<double> getTimes() const; //For debugging purposes

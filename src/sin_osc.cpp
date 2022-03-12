@@ -21,6 +21,12 @@ double SinOsc::next(){
     return tickVal;
 }
 
+void SinOsc::next(Buffer<double>& buffer){
+    //TODO: is there a more efficient implementation?
+    for(size_t i=0; i<buffer.size(); ++i)
+        buffer[i]=next();
+}
+
 void SinOsc::reset(){
     m_curPhase = 0.0;
 }

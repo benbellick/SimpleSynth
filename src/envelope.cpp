@@ -66,6 +66,13 @@ double Envelope::next() {
     //throw an error here (bad state: curTime is before curLoc's time
     return -1;
 }
+
+void Envelope::next(Buffer<double>& buffer) {
+    //TODO: improve?
+    for(size_t i=0; i<buffer.size(); ++i)
+        buffer[i]=next();
+}
+
 void Envelope::reset() {
     m_curTime = 0;
     m_currentLocation = m_breakpoints.cbegin();

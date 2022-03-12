@@ -24,6 +24,7 @@ class StaticOscBank : public Osc {
         );
         ~StaticOscBank(){};
         double next() override;
+        void next(Buffer<double>& buffer) override;
         void reset() override;
         double getFreq() const override;
         void updateFreq(double freq) override;

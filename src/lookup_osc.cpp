@@ -41,6 +41,12 @@ double LookupOsc::next() {
     return tickVal;
 }
 
+void LookupOsc::next(Buffer<double>& buffer) {
+    //TODO: improve?
+    for(size_t i=0; i<buffer.size(); ++i)
+        buffer[i]=next();
+}
+
 void LookupOsc::reset() {
     m_curPhase = 0.0;
 }
